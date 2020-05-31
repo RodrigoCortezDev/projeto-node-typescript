@@ -6,6 +6,13 @@ import AppointmentsRepository from '../repositories/AppointmentsRepository';
 const appointmentsRouter = Router();
 const appointmentsRepository = new AppointmentsRepository();
 
+//List
+appointmentsRouter.get('/', (req, res) => {
+	const appointments = appointmentsRepository.all();
+	return res.json(appointments);
+});
+
+//Create
 appointmentsRouter.post('/', (req, res) => {
 	const { provider, date } = req.body;
 
@@ -19,7 +26,7 @@ appointmentsRouter.post('/', (req, res) => {
 	}
 
 	//Criando o agendamento
-	const appointment = appointmentsRepository.create(provider, parsedDate);
+	const appointment = appointmentsRepository.create({ provider, date: parsedDate });
 
 	//retornando o agendamento cadastrado
 	return res.json({ Inserido: appointment });
