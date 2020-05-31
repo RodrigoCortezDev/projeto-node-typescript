@@ -14,3 +14,5 @@
  - Instala o pacote que faz a conversão do TS pro JS e prepara o server para se manter rodando, faz o papel do Nodemon
     -> yarn add ts-node-dev -D
     * É necessário alterar o package.json definindo os scripts
+
+- Ao clicar no Debug se atentar ao criar o arquivo de debug, é necessário alterar o scripts em package.json colocando o "--inspect" e configurar o launch.json de forma "attach" e protocol "inspect" com restart true (verificar arquivo)
