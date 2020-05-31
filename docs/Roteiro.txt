@@ -16,3 +16,9 @@
     * É necessário alterar o package.json definindo os scripts
 
 - Ao clicar no Debug se atentar ao criar o arquivo de debug, é necessário alterar o scripts em package.json colocando o "--inspect" e configurar o launch.json de forma "attach" e protocol "inspect" com restart true (verificar arquivo)
+
+- Instalando o pactote que cria os ID  de forma unica
+    -> yarn add uuidv4
+
+- Pacote com funções de tratamentos de data
+    -> yarn add date-fns
