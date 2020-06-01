@@ -22,3 +22,12 @@
 
 - Pacote com funções de tratamentos de data
     -> yarn add date-fns
+
+- Principios de separação: models, repository e service
+    * models -> Representação da entidade a ser manipulada (Appointment - Agendamentos)
+    * repository -> vai cuidar da manipulação da entidade, procurar, criar, alterar...
+    * services -> ações isoladas de regras de negocio, por exemplo CreateAppointmentService, serviço que só cria o agendamento, faz validações e chama a ação do repositorio.
+    ** Resumindo os 'services' fazem a regra de negocio, validam, expoem erros e se utilizam do 'repositorio' e os 'repositorios' se utilizam dos 'models'.
+
+- Instalando o Postgres no Docker:
+    -> docker run --name database_postgres -e POSTGRES_PASSWORD=developer -p 5432:5432  -d postgres
