@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { startOfHour, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
+import CreateAppointmentsService from '../services/CreateAppointmentService';
 
 const appointmentsRouter = Router();
 const appointmentsRepository = new AppointmentsRepository();
@@ -14,22 +15,24 @@ appointmentsRouter.get('/', (req, res) => {
 
 //Create
 appointmentsRouter.post('/', (req, res) => {
-	const { provider, date } = req.body;
+	try {
+		//Pegando variaveis do corpo
+		const { provider, date } = req.body;
 
-	//Convertendo a data, pegando a data com a hora inicial do dia
-	const parsedDate = startOfHour(parseISO(date));
+		//Convertendo a data, pegando a data com a hora inicial do dia
+		const parsedDate = parseISO(date);
 
-	//tentando encontrar um agendamento com a mesma data
-	const findAppointmentInSameDate = appointmentsRepository.findByDate(parsedDate);
-	if (findAppointmentInSameDate) {
-		res.status(400).json({ message: 'Data já está sendo utilizada!' });
+		//Criando o service
+		const createAppointment = new CreateAppointmentsService(appointmentsRepository);
+
+		//Executando a criação
+		const appointment = createAppointment.execute({ provider, date: parsedDate });
+
+		//retornando o agendamento cadastrado
+		return res.json(appointment);
+	} catch (error) {
+		res.status(400).json({ message: error.message });
 	}
-
-	//Criando o agendamento
-	const appointment = appointmentsRepository.create({ provider, date: parsedDate });
-
-	//retornando o agendamento cadastrado
-	return res.json({ Inserido: appointment });
 });
 
 export default appointmentsRouter;
