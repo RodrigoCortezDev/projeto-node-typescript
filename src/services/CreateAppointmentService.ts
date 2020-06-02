@@ -1,4 +1,6 @@
 import { startOfHour } from 'date-fns';
+import { getCustomRepository } from 'typeorm';
+
 import Appointment from '../models/Appointments';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
@@ -9,21 +11,16 @@ interface RequestDTO {
 
 /** Service responsavel pela criação do agendamento */
 class CreateAppointmentService {
-	//repositorio
-	private appointmentsRepository: AppointmentsRepository;
-
-	//Construtor
-	constructor(appointmentsRepository: AppointmentsRepository) {
-		this.appointmentsRepository = appointmentsRepository;
-	}
-
 	//Principal e unico metodo do service
-	public execute({ provider, date }: RequestDTO): Appointment {
+	public async execute({ provider, date }: RequestDTO): Promise<Appointment> {
+		//repositorio
+		const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+
 		//Pega a data ignorando o horario
 		const appointmentDate = startOfHour(date);
 
 		//tentando encontrar um agendamento com a mesma data
-		const findAppointmentInSameDate = this.appointmentsRepository.findByDate(appointmentDate);
+		const findAppointmentInSameDate = await appointmentsRepository.findByDate(appointmentDate);
 
 		//Se ja existe um agendamento para mesma data, retornar erro
 		if (findAppointmentInSameDate) {
@@ -31,7 +28,8 @@ class CreateAppointmentService {
 		}
 
 		//Criando o agendamento
-		const appointment = this.appointmentsRepository.create({ provider, date: appointmentDate });
+		const appointment = appointmentsRepository.create({ provider, date: appointmentDate });
+		await appointmentsRepository.save(appointment);
 
 		//retornando o agendamento criado
 		return appointment;

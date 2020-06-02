@@ -31,3 +31,23 @@
 
 - Instalando o Postgres no Docker:
     -> docker run --name database_postgres -e POSTGRES_PASSWORD=developer -p 5432:5432  -d postgres
+
+- Instalando o TypeORM
+    -> yarn add typeorm pg  (ou seja instala o ORM e o drive do Postgres)
+    -> yarn add reflect-metadata
+
+    * criar o arquivo ormconfig.json, usa-se dessa forma pois os comandos via terminal percisam deste arquivo
+    * criano novo script no package.json referente ao TypeORM
+    * executar o comando:
+    -> yarn typeorm
+
+    * para criar migrations executar:
+    -> yarn typeorm migration:create -n CreateAppointments (esse comando cria a migration)
+
+    * para executar as migrations ou seja atualziar o banco
+    -> yarn typeorm migration:run
+
+    * caso precise reverter a ultima migration
+    -> yarn typeorm migration:revert
+
+    * alterações necessárias no tsconfig.json
